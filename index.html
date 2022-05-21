@@ -1,0 +1,92 @@
+<!-- Upload file to pyscript -->
+
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>py-script demos: csv upload form</title>
+  
+    <!-- pyscript -->
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+  </head>
+  <body>
+  
+
+        <h1>py-script : How to read an Image from Local File system using File Upload</h1>
+
+          
+            <p>Upload a csv File</p>
+            <ol>
+              <li>
+                <label for="upload">File Upload:</label>
+                <input type="file" name="upload" id="upload">
+              </li>
+            </ol>
+          
+          
+          
+
+        <p id="content"></p>
+
+<!-- py-script and py-env -->
+
+<!-- <py-env>
+</py-env> -->
+
+<py-script>
+  import asyncio
+  import js
+  from js import document, FileReader
+  from pyodide import create_proxy
+   
+  def read_complete(event):
+    # event is ProgressEvent
+   
+    content = document.getElementById("content");
+    content.innerText = event.target.result
+
+   
+  async def process_file(x):
+    fileList = document.getElementById('upload').files
+   
+    for f in fileList:
+      # reader is a pyodide.JsProxy
+      reader = FileReader.new()
+   
+      # Create a Python proxy for the callback function
+      onload_event = create_proxy(read_complete)
+
+      #console.log("done")
+   
+      reader.onload = onload_event
+   
+      reader.readAsText(f)
+   
+    return
+   
+  def main():
+    # Create a Python proxy for the callback function
+    file_event = create_proxy(process_file)
+   
+    # Set the listener to the callback
+    e = document.getElementById("upload")
+    e.addEventListener("change", file_event, False)
+   
+  main()
+   
+
+</py-script>
+
+<!-- end py-script and py-env -->
+
+<!-- Output -->
+
+<div id="container">
+
+</div>
+
+
+  </body>
+</html>
